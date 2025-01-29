@@ -1,0 +1,40 @@
+name: React App CI with Cypress
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build React app
+        run: npm run build
+
+      - name: Start React app
+        run: npm start &  # Start the React app in the background
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v4
+        with:
+          start: npm start  # Ensures the app is running before tests start
+
+      - name: Deploy (optional)
+        run: |
+          # Add your deployment script here if needed
