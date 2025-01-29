@@ -1,33 +1,17 @@
-name: React App CI with Cypress
+name: Cypress Tests
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: push
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  cypress-run:
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+      # Install npm dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
         with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build React app
-        run: npm run build
-
-      - name: Run Cypress tests
-        uses: cypress-io/github-action@v4
-        with:
+          build: npm run build
           start: npm start
